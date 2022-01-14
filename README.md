@@ -2,13 +2,16 @@
 
 A skeleton project in combination laravel with next.js
 
-Setup
+Setup. Follow this steps
 
 ```bash
 
 git clone https://github.com/arisris/laravel-nextjs.git
 cd laravel-nextjs
-cd laravel && composer install && php artisan migrate --seed
+cd laravel
+composer install
+touch database/database.sqlite
+php artisan migrate --seed
 cd next pnpm install
 cd ../
 pnpm dev
