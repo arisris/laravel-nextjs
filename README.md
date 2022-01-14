@@ -15,6 +15,7 @@ php artisan migrate --seed
 cd next
 pnpm install
 cd ../
+pnpm install
 pnpm dev
 
 ```
