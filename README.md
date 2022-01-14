@@ -8,12 +8,18 @@ Setup
 
 git clone https://github.com/arisris/laravel-nextjs.git
 cd laravel-nextjs
-cd laravel && composer install
+cd laravel && composer install && php artisan migrate --seed
 cd next pnpm install
 cd ../
 pnpm dev
 
 ```
+Go to: http://localhost:3000/
+
+Login:
+
+- User: admin@example.net
+- Pass: password123
 
 
 ### Links
