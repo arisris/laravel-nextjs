@@ -1,0 +1,12 @@
+{
+  "name": "boot-app",
+  "description": "The fullstack application bootstrap in combination of laravel and next.js",
+  "scripts": {
+    "dev": "concurrently \"pnpm run laravel-dev\" \"pnpm run next-dev\"",
+    "laravel-dev": "cd laravel && php artisan serve",
+    "next-dev": "cd next && pnpm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
