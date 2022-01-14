@@ -13,12 +13,11 @@ cd next pnpm install
 cd ../
 pnpm dev
 
-
 ```
 
 
 ### Links
 
-[My Website](https://arisris.com/)
-[Laravel](https://laravel.com/)
-[Next.js](https://nextjs.org/)
+- [My Website](https://arisris.com/)
+- [Laravel](https://laravel.com/)
+- [Next.js](https://nextjs.org/)
