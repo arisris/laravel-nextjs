@@ -12,12 +12,14 @@ cd laravel
 composer install
 touch database/database.sqlite
 php artisan migrate --seed
-cd next pnpm install
+cd next
+pnpm install
 cd ../
 pnpm dev
 
 ```
-Go to: http://localhost:3000/
+Backend: http://localhost:8000/
+Frontend: http://localhost:3000/
 
 Login:
 
