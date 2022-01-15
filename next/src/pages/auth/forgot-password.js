@@ -1,73 +1,74 @@
-import ApplicationLogo from "@/components/ApplicationLogo"
-import AuthCard from "@/components/AuthCard"
-import AuthSessionStatus from "@/components/AuthSessionStatus"
-import AuthValidationErrors from "@/components/AuthValidationErrors"
-import Button from "@/components/Button"
-import GuestLayout from "@/components/Layouts/GuestLayout"
-import Input from "@/components/Input"
-import Label from "@/components/Label"
+import TextInput from "@/components/Form/Input"
+import AuthLayout from "@/components/Layouts/Auth"
 import Link from "next/link"
+import { Button, Card, Preloader } from "konsta/react"
+import { useForm } from "react-hook-form"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { useAuth } from "@/hooks/auth"
-import { useState } from "react"
+import AuthSessionStatus from "@/components/Layouts/Auth/SessionStatus"
+import AuthValidationErrors from "@/components/Layouts/Auth/ValidationErrors"
 
-const ForgotPassword = () => {
-  const { forgotPassword } = useAuth({ middleware: "guest" })
-
-  const [email, setEmail] = useState("")
-  const [errors, setErrors] = useState([])
-  const [status, setStatus] = useState(null)
-
-  const submitForm = event => {
-    event.preventDefault()
-
-    forgotPassword({ email, setErrors, setStatus })
-  }
-
+export default function PageForgotPassword() {
+  const [status, setStatus] = useState("")
+  const [errors, setErrors] = useState("")
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+    },
+  })
+  const { forgotPassword, user } = useAuth({
+    middleware: "guest",
+  })
   return (
-    <GuestLayout>
-      <AuthCard
-        logo={
-          <Link href="/">
-            <a>
-              <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-            </a>
-          </Link>
-        }>
-        <div className="mb-4 text-sm text-gray-600">
-          Forgot your password? No problem. Just let us know your email address
-          and we will email you a password reset link that will allow you to
-          choose a new one.
-        </div>
-
-        {/* Session Status */}
-        <AuthSessionStatus className="mb-4" status={status} />
-
-        {/* Validation Errors */}
-        <AuthValidationErrors className="mb-4" errors={errors} />
-
-        <form onSubmit={submitForm}>
-          {/* Email Address */}
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              name="email"
-              value={email}
-              className="block mt-1 w-full"
-              onChange={event => setEmail(event.target.value)}
-              required
-              autoFocus
-            />
+    <AuthLayout title={"Forgot Password"}>
+      <Card className="min-w-[320px] sm:w-[480px] p-2 relative">
+        {user ? (
+          <div className="text-center">
+            <Preloader color="primary" />
+            <div>Checking session</div>
           </div>
+        ) : (
+          <>
+            <div className="mb-4 text-sm text-gray-600">
+              Forgot your password? No problem. Just let us know your email
+              address and we will email you a password reset link that will
+              allow you to choose a new one.
+            </div>
 
-          <div className="flex items-center justify-end mt-4">
-            <Button>Email Password Reset Link</Button>
-          </div>
-        </form>
-      </AuthCard>
-    </GuestLayout>
+            {/* Session Status */}
+            <AuthSessionStatus className="mb-4" status={status} />
+
+            {/* Validation Errors */}
+            <AuthValidationErrors className="mb-4" errors={errors} />
+            <form
+              method="POST"
+              action=""
+              onSubmit={handleSubmit(data =>
+                forgotPassword({ ...data, setErrors, setStatus }),
+              )}>
+              <TextInput
+                type="email"
+                label="Email"
+                className="mb-4"
+                {...register("email", { required: true })}
+              />
+              <div className="flex items-center mb-4 text-sm">
+                <div>
+                  {/* <Link href="/auth/register">
+                    <a className="text-primary hover:underline font-bold">
+                      Sign Up
+                    </a>
+                  </Link> */}
+                </div>
+                <Button raised type="submit">
+                  Reset Password
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
+      </Card>
+    </AuthLayout>
   )
 }
-
-export default ForgotPassword

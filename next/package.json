@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.4.2",
-    "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/forms": "^0.3.4",
+    "@tailwindcss/typography": "^0.4.1",
     "ahooks": "^3.1.5",
     "autoprefixer": "^10.1.0",
     "axios": "^0.21.1",
@@ -20,15 +21,15 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.24.0",
+    "react-icons": "^4.3.1",
     "react-slick": "^0.28.1",
     "swr": "^0.3.11",
-    "tailwindcss": "^2.0.2",
+    "tailwindcss": "^2.1.1",
     "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.12.1",
     "@next/eslint-plugin-next": "^10.0.4",
-    "babel-eslint": "^10.1.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-next": "^0.0.0",

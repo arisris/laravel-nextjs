@@ -1,117 +1,92 @@
-import ApplicationLogo from "@/components/ApplicationLogo"
-import AuthCard from "@/components/AuthCard"
-import AuthValidationErrors from "@/components/AuthValidationErrors"
-import Button from "@/components/Button"
-import GuestLayout from "@/components/Layouts/GuestLayout"
-import Input from "@/components/Input"
-import Label from "@/components/Label"
-import Link from "next/link"
+import TextInput from "@/components/Form/Input"
+import AuthLayout from "@/components/Layouts/Auth"
+import AuthValidationErrors from "@/components/Layouts/Auth/ValidationErrors"
 import { useAuth } from "@/hooks/auth"
+import { Button, Card, Preloader } from "konsta/react"
+import Link from "next/link"
 import { useState } from "react"
+import { useForm } from "react-hook-form"
 
-const Register = () => {
-  const { register } = useAuth({
-    middleware: "guest",
-    redirectIfAuthenticated: "/dashboard",
+export default function PageRegister() {
+  const [errors, setErrors] = useState("")
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
+    },
   })
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [password_confirmation, setPasswordConfirmation] = useState("")
-  const [errors, setErrors] = useState([])
-
-  const submitForm = event => {
-    event.preventDefault()
-
-    register({ name, email, password, password_confirmation, setErrors })
-  }
-
+  const { register: registerUser, user } = useAuth({
+    middleware: "guest",
+    redirectIfAuthenticated: "/",
+  })
   return (
-    <GuestLayout>
-      <AuthCard
-        logo={
-          <Link href="/">
-            <a>
-              <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-            </a>
-          </Link>
-        }>
-        {/* Validation Errors */}
-        <AuthValidationErrors className="mb-4" errors={errors} />
-
-        <form onSubmit={submitForm}>
-          {/* Name */}
-          <div>
-            <Label htmlFor="name">Name</Label>
-
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              className="block mt-1 w-full"
-              onChange={event => setName(event.target.value)}
-              required
-              autoFocus
-            />
+    <AuthLayout title={"Register"}>
+      <Card className="min-w-[320px] sm:min-w-[480px] p-2">
+        {user ? (
+          <div className="text-center">
+            <Preloader color="primary" />
+            <div>Checking session</div>
           </div>
-
-          {/* Email Address */}
-          <div className="mt-4">
-            <Label htmlFor="email">Email</Label>
-
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              className="block mt-1 w-full"
-              onChange={event => setEmail(event.target.value)}
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div className="mt-4">
-            <Label htmlFor="password">Password</Label>
-
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              className="block mt-1 w-full"
-              onChange={event => setPassword(event.target.value)}
-              required
-              autoComplete="new-password"
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mt-4">
-            <Label htmlFor="password_confirmation">Confirm Password</Label>
-
-            <Input
-              id="password_confirmation"
-              type="password"
-              value={password_confirmation}
-              className="block mt-1 w-full"
-              onChange={event => setPasswordConfirmation(event.target.value)}
-              required
-            />
-          </div>
-
-          <div className="flex items-center justify-end mt-4">
-            <Link href="/auth/login">
-              <a className="underline text-sm text-gray-600 hover:text-gray-900">
-                Already registered?
-              </a>
-            </Link>
-
-            <Button className="ml-4">Register</Button>
-          </div>
-        </form>
-      </AuthCard>
-    </GuestLayout>
+        ) : (
+          <>
+            <AuthValidationErrors className="mb-4" errors={errors} />
+            <form
+              method="POST"
+              action=""
+              onSubmit={handleSubmit(data =>
+                registerUser({ ...data, setErrors }),
+              )}>
+              <TextInput
+                type="username"
+                label="Name"
+                className="my-4"
+                autoComplete="new-username"
+                {...register("name", { required: true })}
+              />
+              <TextInput
+                type="email"
+                label="Email"
+                className="mb-4"
+                autoComplete="new-email"
+                {...register("email", { required: true })}
+              />
+              <TextInput
+                type="password"
+                name="password"
+                label="Password"
+                className="mb-4"
+                autoComplete="new-password"
+                {...register("password", { required: true })}
+              />
+              <TextInput
+                type="password"
+                label="Confirm Password"
+                className="mb-4"
+                autoComplete="new-password"
+                {...register("password_confirmation", { required: true })}
+              />
+              <div className="grid grid-cols-2 items-center mb-4 text-sm">
+                <div>
+                  <Link href="/auth/login">
+                    <a className="text-primary hover:underline font-bold">
+                      Sign In
+                    </a>
+                  </Link>
+                </div>
+                <Button
+                  raised
+                  type="submit"
+                  className="bg-primary text-white text-center p-2">
+                  Sign Up
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
+      </Card>
+    </AuthLayout>
   )
 }
-
-export default Register

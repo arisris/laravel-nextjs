@@ -1,109 +1,79 @@
-import ApplicationLogo from "@/components/ApplicationLogo"
-import AuthCard from "@/components/AuthCard"
-import AuthSessionStatus from "@/components/AuthSessionStatus"
-import AuthValidationErrors from "@/components/AuthValidationErrors"
-import Button from "@/components/Button"
-import GuestLayout from "@/components/Layouts/GuestLayout"
-import Input from "@/components/Input"
-import Label from "@/components/Label"
+import TextInput from "@/components/Form/Input"
+import AuthLayout from "@/components/Layouts/Auth"
 import Link from "next/link"
-import { useAuth } from "@/hooks/auth"
+import { Button, Card, Preloader } from "konsta/react"
+import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import { useAuth } from "@/hooks/auth"
+import AuthSessionStatus from "@/components/Layouts/Auth/SessionStatus"
+import AuthValidationErrors from "@/components/Layouts/Auth/ValidationErrors"
 
-const PasswordReset = () => {
+export default function PageLogin() {
+  const [status, setStatus] = useState("")
+  const [errors, setErrors] = useState("")
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      password_confirmation: "",
+    },
+  })
+  const { resetPassword, user } = useAuth({
+    middleware: "guest",
+  })
   const router = useRouter()
-
-  const { resetPassword } = useAuth({ middleware: "guest" })
-
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [password_confirmation, setPasswordConfirmation] = useState("")
-  const [errors, setErrors] = useState([])
-  const [status, setStatus] = useState(null)
-
-  const submitForm = event => {
-    event.preventDefault()
-
-    resetPassword({
-      email,
-      password,
-      password_confirmation,
-      setErrors,
-      setStatus,
-    })
-  }
-
   useEffect(() => {
-    setEmail(router.query.email || "")
+    setValue("email", router.query.email || "")
   }, [router.query.email])
-
   return (
-    <GuestLayout>
-      <AuthCard
-        logo={
-          <Link href="/">
-            <a>
-              <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-            </a>
-          </Link>
-        }>
-        {/* Session Status */}
-        <AuthSessionStatus className="mb-4" status={status} />
-
-        {/* Validation Errors */}
-        <AuthValidationErrors className="mb-4" errors={errors} />
-
-        <form onSubmit={submitForm}>
-          {/* Email Address */}
-          <div>
-            <Label htmlFor="email">Email</Label>
-
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              className="block mt-1 w-full"
-              onChange={event => setEmail(event.target.value)}
-              required
-              autoFocus
-            />
+    <AuthLayout title={"Login"}>
+      <Card className="min-w-[320px] sm:min-w-[480px] p-2 relative">
+        {user ? (
+          <div className="text-center">
+            <Preloader color="primary" />
+            <div>Checking session</div>
           </div>
+        ) : (
+          <>
+            {/* Session Status */}
+            <AuthSessionStatus className="mb-4" status={status} />
 
-          {/* Password */}
-          <div className="mt-4">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              className="block mt-1 w-full"
-              onChange={event => setPassword(event.target.value)}
-              required
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mt-4">
-            <Label htmlFor="password_confirmation">Confirm Password</Label>
-
-            <Input
-              id="password_confirmation"
-              type="password"
-              value={password_confirmation}
-              className="block mt-1 w-full"
-              onChange={event => setPasswordConfirmation(event.target.value)}
-              required
-            />
-          </div>
-
-          <div className="flex items-center justify-end mt-4">
-            <Button>Reset Password</Button>
-          </div>
-        </form>
-      </AuthCard>
-    </GuestLayout>
+            {/* Validation Errors */}
+            <AuthValidationErrors className="mb-4" errors={errors} />
+            <form
+              method="POST"
+              action=""
+              onSubmit={handleSubmit(data =>
+                resetPassword({ ...data, setErrors, setStatus }),
+              )}>
+              <TextInput
+                type="email"
+                label="Email"
+                className="mb-4"
+                {...register("email", { required: true })}
+              />
+              <TextInput
+                type="password"
+                label="Password"
+                className="mb-4"
+                {...register("password", { required: true })}
+              />
+              <TextInput
+                type="password"
+                label="Confirm Password"
+                className="mb-4"
+                {...register("password_confirmation", { required: true })}
+              />
+              <div className="flex items-center mb-4 text-sm">
+                <Button raised type="submit">
+                  Reset Password
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
+      </Card>
+    </AuthLayout>
   )
 }
-
-export default PasswordReset
