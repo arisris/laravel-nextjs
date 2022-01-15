@@ -1,17 +1,15 @@
-import Head from 'next/head'
+import Head from "next/head"
 
 const GuestLayout = ({ children }) => {
-    return (
-        <div>
-            <Head>
-                <title>Laravel</title>
-            </Head>
+  return (
+    <div>
+      <Head>
+        <title>Laravel</title>
+      </Head>
 
-            <div className="font-sans text-gray-900 antialiased">
-                {children}
-            </div>
-        </div>
-    )
+      <div className="font-sans text-gray-900 antialiased">{children}</div>
+    </div>
+  )
 }
 
 export default GuestLayout

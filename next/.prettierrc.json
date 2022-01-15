@@ -2,7 +2,7 @@
     "arrowParens": "avoid",
     "jsxBracketSameLine": true,
     "semi": false,
-    "singleQuote": true,
-    "tabWidth": 4,
+    "singleQuote": false,
+    "tabWidth": 2,
     "trailingComma": "all"
 }
