@@ -72,7 +72,7 @@ export default function PageRegister() {
                 <div>
                   <Link href="/auth/login">
                     <a className="text-primary hover:underline font-bold">
-                      Sign In
+                      Login
                     </a>
                   </Link>
                 </div>
@@ -80,7 +80,7 @@ export default function PageRegister() {
                   raised
                   type="submit"
                   className="bg-primary text-white text-center p-2">
-                  Sign Up
+                  Register
                 </Button>
               </div>
             </form>

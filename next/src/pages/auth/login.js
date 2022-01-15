@@ -32,7 +32,7 @@ export default function PageLogin() {
   })
   return (
     <AuthLayout title={"Login"}>
-      <Card className="min-w-[320px] sm:min-w-[480px] p-2 relative">
+      <Card className="min-w-[320px] sm:w-[480px] p-2 relative">
         {user ? (
           <div className="text-center">
             <Preloader color="primary" />
@@ -72,7 +72,7 @@ export default function PageLogin() {
                   </Link>
                 </div>
                 <Button raised type="submit">
-                  Sign In
+                  Login
                 </Button>
               </div>
             </form>
