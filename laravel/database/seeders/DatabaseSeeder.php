@@ -15,16 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $admin = \App\Models\User::factory()->create([
-            'name' => "admin",
-            'email' => "admin@example.net",
-            'email_verified_at' => now(),
-            'password' => Hash::make("password123"), // password123
-            'remember_token' => Str::random(10)
+        $this->call([
+            UsersSeeder::class,
+            RolesAndPermissionsSeeder::class
         ]);
-        $users = null;
-        if ($admin) {
-            $users = \App\Models\User::factory(10)->create();
-        }
     }
 }
